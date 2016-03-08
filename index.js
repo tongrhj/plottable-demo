@@ -1,5 +1,5 @@
   /* global Plottable fetch */
-(function () {
+(() => {
   'use strict'
   let regionOneData = [
     { x: 1, y: 12000 },
@@ -29,6 +29,9 @@
       { x: 11, y: 798 },
       { x: 12, y: 245 }]
 
+  const colourScale = new Plottable.Scales.Color()
+  colourScale.range(['#4F9392', '#313131', '#D9BF23'])
+
   // let regionThreeData = [
   //     { x: 1, y: 1234 },
   //     { x: 2, y: 5672 },
@@ -46,8 +49,6 @@
   function makeStackedChart () {
     const xScale = new Plottable.Scales.Linear()
     const yScale = new Plottable.Scales.Linear()
-    const colourScale = new Plottable.Scales.Color()
-    colourScale.range(['#4F9392', '#313131', '#c7dfdf'])
 
     const xAxis = new Plottable.Axes.Numeric(xScale, 'bottom')
     const yAxis = new Plottable.Axes.Numeric(yScale, 'left')
@@ -62,11 +63,13 @@
       .addDataset(new Plottable.Dataset(regionTwoData).metadata(2))
       .x((d) => { return d.x }, xScale)
       .y((d) => { return d.y }, yScale)
-      .attr('fill', (d, i, dataset) => { return dataset.metadata() }, colourScale)
 
     fetch('json/regionthree.json')
       .then((res) => { return res.json() })
-      .then((res) => { plot.addDataset(new Plottable.Dataset(res).metadata(3)) })
+      .then((res) => {
+        plot.addDataset(new Plottable.Dataset(res).metadata(3))
+          .attr('fill', (d, i, dataset) => { return dataset.metadata() }, colourScale)
+      })
 
     const chart = new Plottable.Components.Table([
       [yLabel, yAxis, plot],
@@ -86,12 +89,10 @@
 
     const xScale = new Plottable.Scales.Linear()
     const xAxis = new Plottable.Axes.Numeric(xScale, 'bottom')
-    const colourScale = new Plottable.Scales.Color()
-    colourScale.range(['#4F9392', '#313131', '#c7dfdf'])
 
     const r1_yScale = new Plottable.Scales.Linear()
     const r1_yAxis = new Plottable.Axes.Numeric(r1_yScale, 'left')
-    const r1_plot = new Plottable.Plots.StackedBar()
+    const r1_plot = new Plottable.Plots.Bar()
       .addDataset(new Plottable.Dataset(regionOneData).metadata(1))
       .x((d) => { return d.x }, xScale)
       .y((d) => { return d.y }, r1_yScale)
@@ -100,7 +101,7 @@
 
     const r2_yScale = new Plottable.Scales.Linear()
     const r2_yAxis = new Plottable.Axes.Numeric(r2_yScale, 'left')
-    const r2_plot = new Plottable.Plots.StackedBar()
+    const r2_plot = new Plottable.Plots.Bar()
       .addDataset(new Plottable.Dataset(regionTwoData).metadata(2))
       .x((d) => { return d.x }, xScale)
       .y((d) => { return d.y }, r2_yScale)
@@ -109,7 +110,7 @@
 
     const r3_yScale = new Plottable.Scales.Linear()
     const r3_yAxis = new Plottable.Axes.Numeric(r3_yScale, 'left')
-    const r3_plot = new Plottable.Plots.StackedBar()
+    const r3_plot = new Plottable.Plots.Bar()
       .x((d) => { return d.x }, xScale)
       .y((d) => { return d.y }, r3_yScale)
       .attr('fill', (d, i, dataset) => { return dataset.metadata() }, colourScale)
@@ -117,7 +118,9 @@
 
     fetch('json/regionthree.json')
       .then((res) => { return res.json() })
-      .then((res) => { r3_plot.addDataset(new Plottable.Dataset(res).metadata(3)) })
+      .then((res) => {
+        r3_plot.addDataset(new Plottable.Dataset(res).metadata(3))
+      })
 
     const chart = new Plottable.Components.Table([
       [null, r1_yLabel, r1_yAxis, r1_plot],
@@ -135,11 +138,22 @@
     })
   }
 
+  function makeLegend () {
+    const legend = new Plottable.Components.Legend(colourScale)
+    colourScale.domain(['Region 1', 'Region 2', 'Region 3'])
+    legend.xAlignment('center')
+    legend.yAlignment('center')
+    const chart = new Plottable.Components.Table([[legend]])
+    chart.renderTo('svg#chart-legend')
+  }
+
   makeStackedChart()
   makeTripleChart()
+  makeLegend()
 
-  // document.querySelector('#switch-tab').addEventListener('click', () => {
-  //   document.querySelector('#stacked-chart').classList.toggle('visible')
-  //   document.querySelector('#triple-chart').classList.toggle('visible')
-  // })
+  window.onload = () => {
+    Array.from(document.querySelectorAll('svg')).forEach((elem) => {
+      elem.classList.toggle('visible')
+    })
+  }
 })()
