@@ -36,6 +36,7 @@
         transition: color 0.3s, background 0.2s ease-in;
         border-radius: 3px;
         padding: 5px;
+        float: right;
       }
 
       header span a:hover {
@@ -80,10 +81,12 @@
         opacity: 1;
       }
 
-      .tab {
-        background-color: #ccc;
-        padding: 20px;
-        border-radius: 0 0 0 6px;
+      svg#triple-chart .area {
+        fill-opacity: 0.75;
+      }
+
+      svg#stacked-chart .y-gridlines {
+        opacity: 0.3;
       }
 
       svg#chart-legend {
@@ -91,12 +94,14 @@
         flex-basis: 60px;
         height: 60px;
         width: 90vw;
+        padding-bottom: 20px;
       }
     </style>
 </head>
 <body>
   <header>
-    <h1>Sales by Region over 2015 <span><a href="https://github.com/tongrhj/plottable-demo">Github</a></span></h1>
+    <h1>Sales by Region over 2015</h1>
+    <span><a href="https://github.com/tongrhj/plottable-demo">Github</a></span>
   </header>
 
   <section>
