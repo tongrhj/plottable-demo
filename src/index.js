@@ -1,4 +1,8 @@
-  /* global Plottable fetch */
+  /* global Plottable */
+
+// import 'es6-promise'
+// import 'whatwg-fetch'
+
 (() => {
   'use strict'
   let regionOneData = [
@@ -64,7 +68,7 @@
       .x((d) => { return xMonths[d.x - 1] }, xScale)
       .y((d) => { return d.y }, yScale)
 
-    fetch('json/regionthree.json')
+    window.fetch('json/regionthree.json')
       .then((res) => { return res.json() })
       .then((res) => {
         plot.addDataset(new Plottable.Dataset(res).metadata(3))
@@ -171,7 +175,7 @@
       .attr('fill', (d, i, dataset) => { return dataset.metadata() }, colourScale)
       .size(symbolSize)
 
-    fetch('json/regionthree.json')
+    window.fetch('json/regionthree.json')
       .then((res) => { return res.json() })
       .then((res) => {
         r3_plot.addDataset(new Plottable.Dataset(res).metadata(3))
