@@ -107,7 +107,7 @@
       }
     })
     interaction.onPointerExit(() => {
-      headerDisplay.textContent = 'Sales by Region over 2015'
+      headerDisplay.textContent = 'Regional Sales 2015'
       plot.entities().forEach((entity) => {
         entity.selection.attr('opacity', exitFade)
       })
